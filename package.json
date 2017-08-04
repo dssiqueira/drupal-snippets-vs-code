@@ -1,0 +1,36 @@
+{
+	"name": "drupal-8-snippets",
+	"displayName": "Drupal 8 Snippets",
+	"description": "Drupal 8.4.x Snippets",
+	"version": "0.0.1",
+	"publisher": "dssiqueira",
+	"icon": "images/icon.png",
+	"engines": {
+		"vscode": "^0.10.1"
+	},
+	"galleryBanner": {
+		"color": "#1E81C1",
+		"theme": "light"
+	},
+	"categories": [
+		"Snippets"
+	],
+	"contributes": {
+		"snippets": [
+			{
+				"language": "php",
+				"path": "./snippets/snippets.json"
+			}
+		],
+		"languages": [{
+            "id": "php",
+            "aliases": [ "PHP", "php" ],
+            "extensions": [ ".engine", ".install", ".inc", ".make", ".module", ".profile", ".test", ".theme"]
+        },
+        {
+            "id": "ini",
+            "aliases": ["Ini", "ini"],
+            "extensions": [".info"]
+        }]
+	}
+}
