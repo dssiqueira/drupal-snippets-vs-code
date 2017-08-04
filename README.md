@@ -9,7 +9,7 @@ This extension adds rich language support for the Drupal 8.4.x API to VS Code.
 # Using
 Type part of a snippet, press enter and/Or tab, and the snippet unfolds.
 
-![alt text](http://dsiqueira.com/projects/vs-code-d8-snippets/vs-drupal-8-snippets.gif "Snippets Drupal 8")
+![alt text](https://raw.githubusercontent.com/dssiqueira/drupal-8-snippets-vs-code/master/images/vs-drupal-8-snippets.gif "Snippets Drupal 8")
 
 # Installation
 
