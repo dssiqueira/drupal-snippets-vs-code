@@ -2,8 +2,19 @@
 	"name": "drupal-8-snippets",
 	"displayName": "Drupal 8 Snippets",
 	"description": "Drupal 8.4.x Snippets",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"publisher": "dssiqueira",
+	"author": {
+		"name": "Douglas Siqueira",
+		"email": "douglas.siqueira.silva@gmail.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/dssiqueira/drupal-8-snippets-vs-code"
+	},
+	"bugs": {
+		"url": "https://github.com/dssiqueira/drupal-8-snippets-vs-code/issues"
+	},
 	"icon": "images/icon.png",
 	"engines": {
 		"vscode": "^0.10.1"
