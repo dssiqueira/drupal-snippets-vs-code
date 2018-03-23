@@ -1,8 +1,8 @@
 {
 	"name": "drupal-8-snippets",
 	"displayName": "Drupal 8 Snippets",
-	"description": "Drupal 8.4.x Snippets",
-	"version": "0.0.1",
+	"description": "Drupal 8.6.x Snippets",
+	"version": "0.0.2",
 	"publisher": "dssiqueira",
 	"icon": "images/icon.png",
 	"engines": {
