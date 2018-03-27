@@ -1,9 +1,9 @@
 # README
 ## Visual Studio Code Drupal 8 Snippets
  
-This extension adds rich language support for the Drupal 8.4.x API to VS Code.
+This extension adds rich language support for the Drupal 8.6.x API to VS Code.
 
-[Reference](https://api.drupal.org/api/drupal/core%21core.api.php/group/hooks/8.4.x)
+[Reference](https://api.drupal.org/api/drupal/core%21core.api.php/group/hooks/8.6.x)
 
 
 # Using

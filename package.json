@@ -1,7 +1,7 @@
 {
 	"name": "drupal-8-snippets",
 	"displayName": "Drupal 8 Snippets",
-	"description": "Drupal 8.4.x Snippets",
+	"description": "Drupal 8.6.x Snippets",
 	"version": "0.0.2",
 	"publisher": "dssiqueira",
 	"author": {
@@ -43,5 +43,9 @@
             "aliases": ["Ini", "ini"],
             "extensions": [".info"]
         }]
-	}
+	},
+	"repository": {
+        "type": "git",
+        "url": "https://github.com/dssiqueira/drupal-8-snippets-vs-code.git"
+    }
 }

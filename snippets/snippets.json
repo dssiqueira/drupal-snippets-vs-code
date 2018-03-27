@@ -1055,6 +1055,17 @@
     "description": "Forbid a field storage update from occurring.",
     "scope": "php"
   },
+  "hook_field_ui_preconfigured_options_alter": {
+    "prefix": "hook_field_ui_preconfigured_options_alter",
+    "body": [
+        "/**",
+        " * Implements hook_field_ui_preconfigured_options_alter().",
+        " */",
+        "function hook_field_ui_preconfigured_options_alter(&$$options, $$field_type) {","  $1","}"
+    ],
+    "description": "Perform alterations on preconfigured field options.",
+    "scope": "php"
+  },
   "hook_field_views_data": {
     "prefix": "hook_field_views_data",
     "body": [
@@ -1110,13 +1121,35 @@
     "description": "Perform alterations on Field API widget types.",
     "scope": "php"
   },
+  "hook_field_widget_multivalue_form_alter": {
+    "prefix": "hook_field_widget_multivalue_form_alter",
+    "body": [
+        "/**",
+        " * Implements hook_field_widget_multivalue_form_alter().",
+        " */",
+        "function hook_field_widget_multivalue_form_alter(&$$elements, $$form_state, $$context) {","  $1","}"
+    ],
+    "description": "Alter forms for multi-value field widgets provided by other modules.",
+    "scope": "php"
+  },
+  "hook_field_widget_multivalue_WIDGET_TYPE_form_alter": {
+    "prefix": "hook_field_widget_multivalue_WIDGET_TYPE_form_alter",
+    "body": [
+        "/**",
+        " * Implements hook_field_widget_multivalue_WIDGET_TYPE_form_alter().",
+        " */",
+        "function hook_field_widget_multivalue_WIDGET_TYPE_form_alter(&$$info) {","  $1","}"
+    ],
+    "description": "Alter multi-value widget forms for a widget provided by another module.",
+    "scope": "php"
+  },
   "hook_field_widget_WIDGET_TYPE_form_alter": {
     "prefix": "hook_field_widget_WIDGET_TYPE_form_alter",
     "body": [
         "/**",
         " * Implements hook_field_widget_WIDGET_TYPE_form_alter().",
         " */",
-        "function hook_field_widget_WIDGET_TYPE_form_alter(&$$element, $$form_state, $$context) {","  $1","}"
+        "function hook_field_widget_WIDGET_TYPE_form_alter(&$$elements, $$form_state, $$context) {","  $1","}"
     ],
     "description": "Alter widget forms for a specific widget provided by another module.",
     "scope": "php"
@@ -1638,6 +1671,17 @@
     "description": "Alter local tasks displayed on the page before they are rendered.",
     "scope": "php"
   },
+  "hook_migrate_MIGRATION_ID_prepare_row": {
+    "prefix": "hook_migrate_MIGRATION_ID_prepare_row",
+    "body": [
+        "/**",
+        " * Implements hook_migrate_MIGRATION_ID_prepare_row().",
+        " */",
+        "function hook_migrate_MIGRATION_ID_prepare_row($$row, $$source, $$migration) {","  $1","}"
+    ],
+    "description": "Allows adding data to a row for a migration with the specified ID.",
+    "scope": "php"
+  },
   "hook_migrate_prepare_row": {
     "prefix": "hook_migrate_prepare_row",
     "body": [
@@ -2119,7 +2163,7 @@
         " */",
         "function hook_simpletest_alter(&$$groups) {","  $1","}"
     ],
-    "description": "Alter the list of tests.",
+    "description": "Deprecated: Alter the list of tests.",
     "scope": "php"
   },
   "hook_system_breadcrumb_alter": {
