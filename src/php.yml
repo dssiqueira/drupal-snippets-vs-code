@@ -1,0 +1,674 @@
+# Hand-written PHP snippets. Built into snippets/php.json by scripts/build.mjs.
+# kind tells the validator how to lint the expanded code:
+#   file = whole PHP file, member = inside a class, statement, expression,
+#   array_item = an element inside a PHP array.
+
+# --- Classes and plugins ----------------------------------------------------
+
+- name: Hook class
+  prefix: drupal_hooks_class
+  kind: file
+  description: Class for OOP hooks in src/Hook (Drupal 11.1+). Add methods with the hook_*_oop snippets.
+  body: |
+    <?php
+
+    declare(strict_types=1);
+
+    namespace Drupal\\@@MODULE:1@@\Hook;
+
+    use Drupal\Core\Hook\Attribute\Hook;
+
+    /**
+     * Hook implementations for ${1}.
+     */
+    final class @@CLASS:2@@ {
+
+      $0
+
+    }
+
+- name: Controller
+  prefix: drupal_controller
+  kind: file
+  description: Controller extending ControllerBase (src/Controller).
+  body: |
+    <?php
+
+    declare(strict_types=1);
+
+    namespace Drupal\\@@MODULE:1@@\Controller;
+
+    use Drupal\Core\Controller\ControllerBase;
+
+    /**
+     * Returns responses for ${3:Example} routes.
+     */
+    final class @@CLASS:2@@ extends ControllerBase {
+
+      /**
+       * Builds the response.
+       */
+      public function build(): array {
+        \$build['content'] = [
+          '#type' => 'item',
+          '#markup' => \$this->t('${4:It works!}'),
+        ];
+        return \$build;
+      }
+
+    }
+
+- name: Form
+  prefix: drupal_form
+  kind: file
+  description: Form extending FormBase (src/Form).
+  body: |
+    <?php
+
+    declare(strict_types=1);
+
+    namespace Drupal\\@@MODULE:1@@\Form;
+
+    use Drupal\Core\Form\FormBase;
+    use Drupal\Core\Form\FormStateInterface;
+
+    /**
+     * Provides a ${3:Example} form.
+     */
+    final class @@CLASS:2@@ extends FormBase {
+
+      /**
+       * {@inheritdoc}
+       */
+      public function getFormId(): string {
+        return '${1}_${4:example}';
+      }
+
+      /**
+       * {@inheritdoc}
+       */
+      public function buildForm(array \$form, FormStateInterface \$form_state): array {
+        \$form['${5:message}'] = [
+          '#type' => '${6|textfield,textarea,email,number,select,checkbox|}',
+          '#title' => \$this->t('${7:Message}'),
+          '#required' => TRUE,
+        ];
+
+        \$form['actions'] = [
+          '#type' => 'actions',
+          'submit' => [
+            '#type' => 'submit',
+            '#value' => \$this->t('${8:Submit}'),
+          ],
+        ];
+
+        return \$form;
+      }
+
+      /**
+       * {@inheritdoc}
+       */
+      public function validateForm(array &\$form, FormStateInterface \$form_state): void {
+        $0
+      }
+
+      /**
+       * {@inheritdoc}
+       */
+      public function submitForm(array &\$form, FormStateInterface \$form_state): void {
+        \$this->messenger()->addStatus(\$this->t('The form has been submitted.'));
+        \$form_state->setRedirect('<front>');
+      }
+
+    }
+
+- name: Config form
+  prefix: drupal_config_form
+  kind: file
+  description: 'Settings form extending ConfigFormBase with #config_target (Drupal 10.2+). Needs a config schema (drupal_config_schema).'
+  body: |
+    <?php
+
+    declare(strict_types=1);
+
+    namespace Drupal\\@@MODULE:1@@\Form;
+
+    use Drupal\Core\Form\ConfigFormBase;
+    use Drupal\Core\Form\FormStateInterface;
+
+    /**
+     * Configure ${1} settings for this site.
+     */
+    final class @@CLASS:2@@ extends ConfigFormBase {
+
+      /**
+       * {@inheritdoc}
+       */
+      public function getFormId(): string {
+        return '${1}_settings';
+      }
+
+      /**
+       * {@inheritdoc}
+       */
+      protected function getEditableConfigNames(): array {
+        return ['${1}.settings'];
+      }
+
+      /**
+       * {@inheritdoc}
+       */
+      public function buildForm(array \$form, FormStateInterface \$form_state): array {
+        \$form['${3:example}'] = [
+          '#type' => '${4|textfield,textarea,checkbox,number,email|}',
+          '#title' => \$this->t('${5:Example}'),
+          '#config_target' => '${1}.settings:${3}',
+        ];
+        $0
+        return parent::buildForm(\$form, \$form_state);
+      }
+
+    }
+
+- name: Block plugin
+  prefix: drupal_block
+  kind: file
+  description: 'Block plugin with the #[Block] attribute (Drupal 10.2+, src/Plugin/Block).'
+  body: |
+    <?php
+
+    declare(strict_types=1);
+
+    namespace Drupal\\@@MODULE:1@@\Plugin\Block;
+
+    use Drupal\Core\Block\Attribute\Block;
+    use Drupal\Core\Block\BlockBase;
+    use Drupal\Core\StringTranslation\TranslatableMarkup;
+
+    /**
+     * Provides the ${3:Example} block.
+     */
+    #[Block(
+      id: '${1}_${4:example}',
+      admin_label: new TranslatableMarkup('${3}'),
+      category: new TranslatableMarkup('${5:Custom}'),
+    )]
+    final class @@CLASS:2@@ extends BlockBase {
+
+      /**
+       * {@inheritdoc}
+       */
+      public function build(): array {
+        \$build['content'] = [
+          '#markup' => \$this->t('${6:It works!}'),
+        ];
+        return \$build;
+      }
+
+    }
+
+- name: Event subscriber
+  prefix: drupal_event_subscriber
+  kind: file
+  description: Event subscriber (src/EventSubscriber). Register it with drupal_service_event_subscriber.
+  body: |
+    <?php
+
+    declare(strict_types=1);
+
+    namespace Drupal\\@@MODULE:1@@\EventSubscriber;
+
+    use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+    use Symfony\Component\HttpKernel\Event\RequestEvent;
+    use Symfony\Component\HttpKernel\KernelEvents;
+
+    /**
+     * ${3:Reacts to kernel requests}.
+     */
+    final class @@CLASS:2@@ implements EventSubscriberInterface {
+
+      /**
+       * Kernel request event handler.
+       */
+      public function onKernelRequest(RequestEvent \$event): void {
+        $0
+      }
+
+      /**
+       * {@inheritdoc}
+       */
+      public static function getSubscribedEvents(): array {
+        return [
+          KernelEvents::REQUEST => ['onKernelRequest'],
+        ];
+      }
+
+    }
+
+- name: Service class
+  prefix: drupal_service_class
+  kind: file
+  description: Service class with constructor property promotion. Register it with drupal_service.
+  body: |
+    <?php
+
+    declare(strict_types=1);
+
+    namespace Drupal\\@@MODULE:1@@;
+
+    use Drupal\Core\Entity\EntityTypeManagerInterface;
+
+    /**
+     * ${3:Example service}.
+     */
+    final class @@CLASS:2@@ {
+
+      public function __construct(
+        private readonly EntityTypeManagerInterface \$entityTypeManager,
+      ) {}
+
+      $0
+
+    }
+
+- name: Drush command
+  prefix: drupal_drush_command
+  kind: file
+  description: Drush 12+ command with attributes (src/Drush/Commands).
+  body: |
+    <?php
+
+    declare(strict_types=1);
+
+    namespace Drupal\\@@MODULE:1@@\Drush\Commands;
+
+    use Drush\Attributes as CLI;
+    use Drush\Commands\DrushCommands;
+
+    /**
+     * Drush commands for ${1}.
+     */
+    final class @@CLASS:2@@ extends DrushCommands {
+
+      /**
+       * ${3:Command description}.
+       */
+      #[CLI\Command(name: '${1}:${4:example}', aliases: ['${5:ex}'])]
+      #[CLI\Argument(name: 'arg1', description: 'Argument description.')]
+      #[CLI\Option(name: 'option-name', description: 'Option description.')]
+      #[CLI\Usage(name: '${1}:${4} foo', description: 'Usage description.')]
+      public function ${4/(.*)/${1:/camelcase}/}(string \$arg1 = '', array \$options = ['option-name' => 'default']): void {
+        $0
+        \$this->logger()->success(dt('Done.'));
+      }
+
+    }
+
+- name: Queue worker
+  prefix: drupal_queue_worker
+  kind: file
+  description: 'Queue worker plugin with the #[QueueWorker] attribute (Drupal 10.3+, src/Plugin/QueueWorker).'
+  body: |
+    <?php
+
+    declare(strict_types=1);
+
+    namespace Drupal\\@@MODULE:1@@\Plugin\QueueWorker;
+
+    use Drupal\Core\Queue\Attribute\QueueWorker;
+    use Drupal\Core\Queue\QueueWorkerBase;
+    use Drupal\Core\StringTranslation\TranslatableMarkup;
+
+    /**
+     * ${3:Processes example items}.
+     */
+    #[QueueWorker(
+      id: '${1}_${4:example}',
+      title: new TranslatableMarkup('${5:Example queue worker}'),
+      cron: ['time' => ${6:60}],
+    )]
+    final class @@CLASS:2@@ extends QueueWorkerBase {
+
+      /**
+       * {@inheritdoc}
+       */
+      public function processItem(\$data): void {
+        $0
+      }
+
+    }
+
+- name: Field formatter
+  prefix: drupal_field_formatter
+  kind: file
+  description: 'Field formatter plugin with the #[FieldFormatter] attribute (Drupal 10.3+, src/Plugin/Field/FieldFormatter).'
+  body: |
+    <?php
+
+    declare(strict_types=1);
+
+    namespace Drupal\\@@MODULE:1@@\Plugin\Field\FieldFormatter;
+
+    use Drupal\Core\Field\Attribute\FieldFormatter;
+    use Drupal\Core\Field\FieldItemListInterface;
+    use Drupal\Core\Field\FormatterBase;
+    use Drupal\Core\StringTranslation\TranslatableMarkup;
+
+    /**
+     * Plugin implementation of the '${1}_${3:example}' formatter.
+     */
+    #[FieldFormatter(
+      id: '${1}_${3}',
+      label: new TranslatableMarkup('${4:Example}'),
+      field_types: ['${5:string}'],
+    )]
+    final class @@CLASS:2@@ extends FormatterBase {
+
+      /**
+       * {@inheritdoc}
+       */
+      public function viewElements(FieldItemListInterface \$items, \$langcode): array {
+        \$element = [];
+        foreach (\$items as \$delta => \$item) {
+          \$element[\$delta] = [
+            '#markup' => \$item->value,
+          ];
+        }
+        return \$element;
+      }
+
+    }
+
+- name: Field widget
+  prefix: drupal_field_widget
+  kind: file
+  description: 'Field widget plugin with the #[FieldWidget] attribute (Drupal 10.3+, src/Plugin/Field/FieldWidget).'
+  body: |
+    <?php
+
+    declare(strict_types=1);
+
+    namespace Drupal\\@@MODULE:1@@\Plugin\Field\FieldWidget;
+
+    use Drupal\Core\Field\Attribute\FieldWidget;
+    use Drupal\Core\Field\FieldItemListInterface;
+    use Drupal\Core\Field\WidgetBase;
+    use Drupal\Core\Form\FormStateInterface;
+    use Drupal\Core\StringTranslation\TranslatableMarkup;
+
+    /**
+     * Plugin implementation of the '${1}_${3:example}' widget.
+     */
+    #[FieldWidget(
+      id: '${1}_${3}',
+      label: new TranslatableMarkup('${4:Example}'),
+      field_types: ['${5:string}'],
+    )]
+    final class @@CLASS:2@@ extends WidgetBase {
+
+      /**
+       * {@inheritdoc}
+       */
+      public function formElement(FieldItemListInterface \$items, \$delta, array \$element, array &\$form, FormStateInterface \$form_state): array {
+        \$element['value'] = \$element + [
+          '#type' => 'textfield',
+          '#default_value' => \$items[\$delta]->value ?? NULL,
+        ];
+        return \$element;
+      }
+
+    }
+
+- name: Kernel test
+  prefix: drupal_kernel_test
+  kind: file
+  description: Kernel test (tests/src/Kernel).
+  body: |
+    <?php
+
+    declare(strict_types=1);
+
+    namespace Drupal\Tests\\@@MODULE:1@@\Kernel;
+
+    use Drupal\KernelTests\KernelTestBase;
+
+    /**
+     * ${3:Tests the example feature}.
+     *
+     * @group ${1}
+     */
+    final class @@CLASS:2@@ extends KernelTestBase {
+
+      /**
+       * {@inheritdoc}
+       */
+      protected static \$modules = ['${1}'];
+
+      /**
+       * ${4:Tests something}.
+       */
+      public function test${5:Something}(): void {
+        $0
+      }
+
+    }
+
+- name: Functional test
+  prefix: drupal_functional_test
+  kind: file
+  description: Functional (browser) test (tests/src/Functional).
+  body: |
+    <?php
+
+    declare(strict_types=1);
+
+    namespace Drupal\Tests\\@@MODULE:1@@\Functional;
+
+    use Drupal\Tests\BrowserTestBase;
+
+    /**
+     * ${3:Tests the example page}.
+     *
+     * @group ${1}
+     */
+    final class @@CLASS:2@@ extends BrowserTestBase {
+
+      /**
+       * {@inheritdoc}
+       */
+      protected \$defaultTheme = 'stark';
+
+      /**
+       * {@inheritdoc}
+       */
+      protected static \$modules = ['${1}'];
+
+      /**
+       * ${4:Tests the page loads}.
+       */
+      public function test${5:PageLoads}(): void {
+        \$this->drupalLogin(\$this->drupalCreateUser([${6:'access content'}]));
+        \$this->drupalGet('${7:<front>}');
+        \$this->assertSession()->statusCodeEquals(200);
+        $0
+      }
+
+    }
+
+# --- Dependency injection -----------------------------------------------------
+
+- name: Dependency injection (create)
+  prefix: drupal_create
+  kind: member
+  description: Constructor + create() for controllers and forms (ContainerInjectionInterface).
+  body: |
+    public function __construct(
+      private readonly ${1:EntityTypeManagerInterface} \$${2:entityTypeManager},
+    ) {}
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function create(ContainerInterface \$container): static {
+      return new static(
+        \$container->get('${3:entity_type.manager}'),
+      );
+    }
+
+- name: Dependency injection for plugins (create)
+  prefix: drupal_plugin_create
+  kind: member
+  description: Constructor + create() for plugins (ContainerFactoryPluginInterface).
+  body: |
+    public function __construct(
+      array \$configuration,
+      \$plugin_id,
+      \$plugin_definition,
+      private readonly ${1:EntityTypeManagerInterface} \$${2:entityTypeManager},
+    ) {
+      parent::__construct(\$configuration, \$plugin_id, \$plugin_definition);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function create(ContainerInterface \$container, array \$configuration, \$plugin_id, \$plugin_definition): static {
+      return new static(
+        \$configuration,
+        \$plugin_id,
+        \$plugin_definition,
+        \$container->get('${3:entity_type.manager}'),
+      );
+    }
+
+# --- Everyday code -------------------------------------------------------------
+
+- name: Load entity
+  prefix: drupal_entity_load
+  kind: expression
+  description: Load an entity by ID.
+  body: |
+    \Drupal::entityTypeManager()->getStorage('${1:node}')->load(${2:\$id})
+
+- name: Load multiple entities by properties
+  prefix: drupal_entity_load_by_properties
+  kind: expression
+  description: Load entities matching property values.
+  body: |
+    \Drupal::entityTypeManager()->getStorage('${1:node}')->loadByProperties([
+      '${2:type}' => '${3:article}',
+      '${4:status}' => ${5:1},
+    ])
+
+- name: Entity query
+  prefix: drupal_entity_query
+  kind: expression
+  description: Entity query (accessCheck() is mandatory since Drupal 10).
+  body: |
+    \Drupal::entityTypeManager()->getStorage('${1:node}')->getQuery()
+      ->accessCheck(${2|TRUE,FALSE|})
+      ->condition('${3:type}', '${4:article}')
+      ->sort('${5:created}', '${6|DESC,ASC|}')
+      ->range(0, ${7:10})
+      ->execute()
+
+- name: Logger
+  prefix: drupal_logger
+  kind: statement
+  description: Log a message to the module channel.
+  body: |
+    \Drupal::logger('@@MODULE_FILE:1@@')->${2|notice,info,warning,error,debug|}('${3:Message @placeholder}', ['@placeholder' => ${4:\$value}]);
+
+- name: Messenger
+  prefix: drupal_messenger
+  kind: statement
+  description: Show a message to the user.
+  body: |
+    \Drupal::messenger()->${1|addStatus,addWarning,addError|}(t('${2:Message}'));
+
+- name: Read config
+  prefix: drupal_config_get
+  kind: expression
+  description: Read a value from simple configuration.
+  body: |
+    \Drupal::config('@@MODULE_FILE:1@@.settings')->get('${2:key}')
+
+- name: Write config
+  prefix: drupal_config_set
+  kind: statement
+  description: Write a value to simple configuration.
+  body: |
+    \Drupal::configFactory()->getEditable('@@MODULE_FILE:1@@.settings')
+      ->set('${2:key}', ${3:\$value})
+      ->save();
+
+- name: Url from route
+  prefix: drupal_url
+  kind: expression
+  description: Build a Url object from a route.
+  body: |
+    \Drupal\Core\Url::fromRoute('${1:entity.node.canonical}', [${2:'node' => \$nid}])
+
+- name: Link from route
+  prefix: drupal_link
+  kind: expression
+  description: Build a Link object from a route.
+  body: |
+    \Drupal\Core\Link::createFromRoute(t('${1:Link text}'), '${2:<front>}')
+
+- name: Render array (theme)
+  prefix: drupal_render_theme
+  kind: expression
+  description: Render array using a theme hook, with cache metadata.
+  body: |
+    [
+      '#theme' => '${1:item_list}',
+      '#${2:items}' => ${3:\$items},
+      '#cache' => [
+        'tags' => [${4:'node_list'}],
+        'contexts' => [${5:'url.path'}],
+      ],
+    ]
+
+- name: Cache metadata
+  prefix: drupal_cache_metadata
+  kind: array_item
+  description: '#cache key for a render array.'
+  body: |
+    '#cache' => [
+      'contexts' => [${1:'user.permissions'}],
+      'tags' => [${2:'node_list'}],
+      'max-age' => ${3:\Drupal\Core\Cache\Cache::PERMANENT},
+    ],
+
+- name: Cache get/set
+  prefix: drupal_cache
+  kind: statement
+  description: Read from the cache, computing and storing the value on a miss.
+  body: |
+    \$cid = '${1:mymodule:key}';
+    if (\$cache = \Drupal::cache()->get(\$cid)) {
+      \$data = \$cache->data;
+    }
+    else {
+      \$data = ${2:\$this->compute()};
+      \Drupal::cache()->set(\$cid, \$data, \Drupal\Core\Cache\CacheBackendInterface::CACHE_PERMANENT, [${3:'node_list'}]);
+    }
+
+- name: Batch
+  prefix: drupal_batch
+  kind: statement
+  description: Start a batch with BatchBuilder.
+  body: |
+    \$batch = (new \Drupal\Core\Batch\BatchBuilder())
+      ->setTitle(t('${1:Processing}'))
+      ->setFinishCallback([${2:static::class}, '${3:batchFinished}'])
+      ->addOperation([${2}, '${4:batchProcess}'], [${5:\$items}]);
+    batch_set(\$batch->toArray());
+
+- name: Access result
+  prefix: drupal_access_result
+  kind: statement
+  description: Return an AccessResult based on a permission.
+  body: |
+    return \Drupal\Core\Access\AccessResult::allowedIfHasPermission(\$${1:account}, '${2:access content}');

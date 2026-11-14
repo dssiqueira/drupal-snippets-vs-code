@@ -1,0 +1,190 @@
+{
+	"Module info file": {
+		"prefix": "drupal_info_module",
+		"description": "mymodule.info.yml for a module.",
+		"body": [
+			"name: '${1:My module}'",
+			"type: module",
+			"description: '${2:Provides an example feature.}'",
+			"package: ${3:Custom}",
+			"core_version_requirement: ${4|^11,^10.3 \\|\\| ^11|}",
+			"dependencies:",
+			"  - drupal:${5:node}"
+		]
+	},
+	"Theme info file": {
+		"prefix": "drupal_info_theme",
+		"description": "mytheme.info.yml for a theme.",
+		"body": [
+			"name: '${1:My theme}'",
+			"type: theme",
+			"description: '${2:A custom theme.}'",
+			"core_version_requirement: ${3|^11,^10.3 \\|\\| ^11|}",
+			"base theme: ${4|false,stable9,olivero,claro|}",
+			"libraries:",
+			"  - ${5:${TM_FILENAME_BASE/[.].*$//}}/global",
+			"regions:",
+			"  header: Header",
+			"  content: Content",
+			"  sidebar: Sidebar",
+			"  footer: Footer"
+		]
+	},
+	"Route (controller)": {
+		"prefix": "drupal_route",
+		"description": "Route to a controller method (mymodule.routing.yml).",
+		"body": [
+			"${1:${TM_FILENAME_BASE/[.].*$//}}.${2:example}:",
+			"  path: '/${3:example}'",
+			"  defaults:",
+			"    _title: '${4:Example}'",
+			"    _controller: '\\Drupal\\\\${1}\\Controller\\\\${5:ExampleController}::build'",
+			"  requirements:",
+			"    _permission: '${6:access content}'"
+		]
+	},
+	"Route (form)": {
+		"prefix": "drupal_route_form",
+		"description": "Route to a form, e.g. a settings page (mymodule.routing.yml).",
+		"body": [
+			"${1:${TM_FILENAME_BASE/[.].*$//}}.${2:settings}:",
+			"  path: '/admin/config/${3:system}/${2}'",
+			"  defaults:",
+			"    _title: '${4:Settings}'",
+			"    _form: '\\Drupal\\\\${1}\\Form\\\\${5:SettingsForm}'",
+			"  requirements:",
+			"    _permission: '${6:administer site configuration}'"
+		]
+	},
+	"Route entity parameter": {
+		"prefix": "drupal_route_param",
+		"description": "Upcast a route parameter to an entity (inside a route definition).",
+		"body": [
+			"options:",
+			"  parameters:",
+			"    ${1:node}:",
+			"      type: entity:${1}"
+		]
+	},
+	"Service": {
+		"prefix": "drupal_service",
+		"description": "Service definition with autowiring (mymodule.services.yml).",
+		"body": [
+			"Drupal\\\\${1:${TM_FILENAME_BASE/[.].*$//}}\\\\${2:ExampleService}:",
+			"  autowire: true",
+			"${1}.${3:example}: '@Drupal\\\\${1}\\\\${2}'"
+		]
+	},
+	"Service (arguments)": {
+		"prefix": "drupal_service_args",
+		"description": "Service definition with explicit arguments (mymodule.services.yml).",
+		"body": [
+			"${1:${TM_FILENAME_BASE/[.].*$//}}.${2:example}:",
+			"  class: Drupal\\\\${1}\\\\${3:ExampleService}",
+			"  arguments: ['@${4:entity_type.manager}']"
+		]
+	},
+	"Event subscriber service": {
+		"prefix": "drupal_service_event_subscriber",
+		"description": "Register an event subscriber (mymodule.services.yml).",
+		"body": [
+			"${1:${TM_FILENAME_BASE/[.].*$//}}.${2:example_subscriber}:",
+			"  class: Drupal\\\\${1}\\EventSubscriber\\\\${3:ExampleSubscriber}",
+			"  autowire: true",
+			"  tags:",
+			"    - { name: event_subscriber }"
+		]
+	},
+	"Library": {
+		"prefix": "drupal_library",
+		"description": "Asset library (mymodule.libraries.yml).",
+		"body": [
+			"${1:global}:",
+			"  version: VERSION",
+			"  css:",
+			"    ${2|theme,component,layout,base,state|}:",
+			"      ${3:css/style.css}: {}",
+			"  js:",
+			"    ${4:js/script.js}: {}",
+			"  dependencies:",
+			"    - core/drupal",
+			"    - core/once"
+		]
+	},
+	"Permission": {
+		"prefix": "drupal_permission",
+		"description": "Permission (mymodule.permissions.yml).",
+		"body": [
+			"${1:administer example}:",
+			"  title: '${2:Administer example}'",
+			"  description: '${3:Optional description.}'",
+			"  restrict access: ${4|false,true|}"
+		]
+	},
+	"Menu link": {
+		"prefix": "drupal_menu_link",
+		"description": "Menu link (mymodule.links.menu.yml).",
+		"body": [
+			"${1:${TM_FILENAME_BASE/[.].*$//}}.${2:settings}:",
+			"  title: '${3:Settings}'",
+			"  description: '${4:Configure example settings.}'",
+			"  parent: ${5:system.admin_config_system}",
+			"  route_name: ${1}.${2}",
+			"  weight: ${6:10}"
+		]
+	},
+	"Local task (tab)": {
+		"prefix": "drupal_local_task",
+		"description": "Local task / tab (mymodule.links.task.yml).",
+		"body": [
+			"${1:${TM_FILENAME_BASE/[.].*$//}}.${2:example_tab}:",
+			"  title: '${3:Example}'",
+			"  route_name: ${4:${1}.example}",
+			"  base_route: ${5:entity.node.canonical}",
+			"  weight: ${6:10}"
+		]
+	},
+	"Local action": {
+		"prefix": "drupal_local_action",
+		"description": "Local action button (mymodule.links.action.yml).",
+		"body": [
+			"${1:${TM_FILENAME_BASE/[.].*$//}}.${2:add}:",
+			"  route_name: ${3:node.add_page}",
+			"  title: '${4:Add content}'",
+			"  appears_on:",
+			"    - ${5:system.admin_content}"
+		]
+	},
+	"Config schema": {
+		"prefix": "drupal_config_schema",
+		"description": "Schema for simple configuration (config/schema/mymodule.schema.yml).",
+		"body": [
+			"${1:${TM_FILENAME_BASE/[.].*$//}}.settings:",
+			"  type: config_object",
+			"  label: '${2:Example settings}'",
+			"  mapping:",
+			"    ${3:example}:",
+			"      type: ${4|string,boolean,integer,label,text|}",
+			"      label: '${5:Example}'"
+		]
+	},
+	"Single Directory Component": {
+		"prefix": "drupal_component",
+		"description": "Single Directory Component metadata (components/name/name.component.yml).",
+		"body": [
+			"\\$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json",
+			"name: ${1:Card}",
+			"status: ${2|stable,experimental,deprecated,obsolete|}",
+			"description: '${3:A card component.}'",
+			"props:",
+			"  type: object",
+			"  properties:",
+			"    ${4:title}:",
+			"      type: string",
+			"      title: ${5:Title}",
+			"slots:",
+			"  ${6:content}:",
+			"    title: ${7:Content}"
+		]
+	}
+}

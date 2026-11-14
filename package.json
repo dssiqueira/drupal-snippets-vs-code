@@ -1,40 +1,97 @@
 {
 	"name": "drupal-8-snippets",
-	"displayName": "Drupal 8 Snippets",
-	"description": "Drupal 8.6.x Snippets",
-	"version": "0.0.2",
+	"displayName": "Drupal Snippets",
+	"description": "Drupal 10, 11 and 12 snippets: every core hook (procedural and OOP #[Hook]), classes and plugins with attributes, YAML and Twig.",
+	"version": "1.0.0",
 	"publisher": "dssiqueira",
+	"license": "MIT",
 	"icon": "images/icon.png",
 	"engines": {
-		"vscode": "^0.10.1"
+		"vscode": "^1.80.0"
 	},
 	"galleryBanner": {
 		"color": "#1E81C1",
-		"theme": "light"
+		"theme": "dark"
 	},
 	"categories": [
 		"Snippets"
 	],
+	"keywords": [
+		"drupal",
+		"drupal 10",
+		"drupal 11",
+		"drupal 12",
+		"hooks",
+		"php",
+		"twig",
+		"yaml",
+		"snippets"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/dssiqueira/drupal-snippets-vs-code.git"
+	},
+	"bugs": {
+		"url": "https://github.com/dssiqueira/drupal-snippets-vs-code/issues"
+	},
+	"homepage": "https://github.com/dssiqueira/drupal-snippets-vs-code#readme",
 	"contributes": {
 		"snippets": [
 			{
 				"language": "php",
-				"path": "./snippets/snippets.json"
+				"path": "./snippets/hooks.json"
+			},
+			{
+				"language": "php",
+				"path": "./snippets/php.json"
+			},
+			{
+				"language": "yaml",
+				"path": "./snippets/yaml.json"
+			},
+			{
+				"language": "twig",
+				"path": "./snippets/twig.json"
 			}
 		],
-		"languages": [{
-            "id": "php",
-            "aliases": [ "PHP", "php" ],
-            "extensions": [ ".engine", ".install", ".inc", ".make", ".module", ".profile", ".test", ".theme"]
-        },
-        {
-            "id": "ini",
-            "aliases": ["Ini", "ini"],
-            "extensions": [".info"]
-        }]
+		"languages": [
+			{
+				"id": "php",
+				"extensions": [
+					".module",
+					".install",
+					".inc",
+					".profile",
+					".theme",
+					".engine"
+				]
+			},
+			{
+				"id": "twig",
+				"aliases": [
+					"Twig",
+					"twig"
+				],
+				"extensions": [
+					".twig"
+				]
+			}
+		]
 	},
-	"repository": {
-        "type": "git",
-        "url": "https://github.com/dssiqueira/drupal-8-snippets-vs-code.git"
-    }
+	"scripts": {
+		"generate:hooks": "node scripts/generate-hooks.mjs",
+		"build": "node scripts/build.mjs",
+		"validate": "node scripts/validate.mjs",
+		"check": "npm run build && npm run validate",
+		"package": "vsce package --no-dependencies"
+	},
+	"devDependencies": {
+		"@vscode/vsce": "^4.1.1",
+		"monaco-editor": "0.57.0",
+		"ovsx": "^1.4.0",
+		"yaml": "^2.8.1"
+	},
+	"config": {
+		"drupalCore": "11.4.12"
+	}
 }

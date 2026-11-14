@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [master, main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: PHP (for php -l)
+        run: php --version
+
+      - run: npm ci
+
+      - name: Build snippets from src/
+        run: npm run build
+
+      - name: Hook snippets match the pinned Drupal core
+        run: |
+          CORE="$(node -p "require('./package.json').config.drupalCore")"
+          git clone --quiet --depth 1 --branch "$CORE" https://github.com/drupal/core /tmp/drupal-core
+          npm run generate:hooks -- /tmp/drupal-core
+
+      - name: Generated files are committed
+        run: git diff --exit-code -- snippets README.md
+
+      - name: Validate every snippet
+        run: npm run validate
+
+      - name: Package
+        run: npx vsce package --no-dependencies --out drupal-snippets.vsix
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: drupal-snippets-vsix
+          path: drupal-snippets.vsix
