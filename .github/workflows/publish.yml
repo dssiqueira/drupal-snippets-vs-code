@@ -1,0 +1,62 @@
+name: Publish
+
+# Publishes when a version tag (e.g. v1.0.0) is pushed. No stored secrets:
+#
+# - VS Code Marketplace: Trusted Publishing (OIDC). One-time setup at
+#   https://marketplace.visualstudio.com/manage/publishers/dssiqueira
+#   > Trusted Publishing > Create: owner "dssiqueira",
+#   repository "drupal-snippets-vs-code", workflow "publish.yml", no environment.
+#
+# - Open VSX (Cursor, VSCodium, Windsurf...): Trusted Publishing too, once the
+#   "dssiqueira" namespace exists on open-vsx.org with a trusted publisher for
+#   this repo/workflow. Enable by setting the repository variable
+#   PUBLISH_OPENVSX=true (Settings > Secrets and variables > Actions > Variables).
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # GitHub release
+      id-token: write # OIDC for Marketplace / Open VSX
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Tag matches package.json version
+        run: |
+          VERSION="v$(node -p "require('./package.json').version")"
+          if [ "$VERSION" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match package.json version $VERSION"
+            exit 1
+          fi
+
+      - run: npm ci
+      - run: npm run check
+
+      - name: Package
+        run: npx vsce package --no-dependencies --out drupal-snippets.vsix
+
+      - name: Publish to VS Code Marketplace
+        run: npx vsce publish --oidc --packagePath drupal-snippets.vsix
+
+      - name: Publish to Open VSX
+        if: vars.PUBLISH_OPENVSX == 'true'
+        run: npx ovsx publish drupal-snippets.vsix --trusted-publishing
+
+      - name: GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" drupal-snippets.vsix --title "$GITHUB_REF_NAME" --generate-notes

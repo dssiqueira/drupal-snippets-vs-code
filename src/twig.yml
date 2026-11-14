@@ -1,0 +1,132 @@
+# Hand-written Twig snippets for Drupal templates (*.html.twig).
+# Built into snippets/twig.json by scripts/build.mjs.
+
+- name: Translate (filter)
+  prefix: drupal_t
+  description: Translatable string with the |t filter.
+  body: |
+    {{ '${1:Text}'|t }}
+
+- name: Translate (block)
+  prefix: drupal_trans
+  description: '{% trans %} block with a variable.'
+  body: |
+    {% trans %}
+      ${1:Hello} {{ ${2:name} }}
+    {% endtrans %}
+
+- name: Attach library
+  prefix: drupal_attach_library
+  description: Attach an asset library from a template.
+  body: |
+    {{ attach_library('${1:mytheme}/${2:global}') }}
+
+- name: Path
+  prefix: drupal_path
+  description: Relative URL for a route.
+  body: |
+    {{ path('${1:entity.node.canonical}', {'${2:node}': ${3:node.id}}) }}
+
+- name: URL
+  prefix: drupal_url
+  description: Absolute URL for a route.
+  body: |
+    {{ url('${1:<front>}') }}
+
+- name: Link
+  prefix: drupal_link
+  description: Link from text and a Url object.
+  body: |
+    {{ link(${1:'Text'}, ${2:url}) }}
+
+- name: File URL
+  prefix: drupal_file_url
+  description: Public URL for a file URI.
+  body: |
+    {{ file_url(${1:node.field_image.entity.uri.value}) }}
+
+- name: Wrapper with classes
+  prefix: drupal_classes
+  description: Element with BEM-style classes added to attributes.
+  body: |
+    {%
+      set classes = [
+        '${1:block}',
+        '${1}--${2:modifier}',
+      ]
+    %}
+    <${3:div}{{ attributes.addClass(classes) }}>
+      $0
+    </${3}>
+
+- name: Add class
+  prefix: drupal_add_class
+  description: Add a class to attributes.
+  body: |
+    {{ attributes.addClass('${1:class}') }}
+
+- name: Create attribute
+  prefix: drupal_create_attribute
+  description: Create a new Attribute object.
+  body: |
+    {% set ${1:link_attributes} = create_attribute() %}
+
+- name: Content without
+  prefix: drupal_without
+  description: Render content without some fields.
+  body: |
+    {{ content|without('${1:field_name}') }}
+
+- name: If field not empty
+  prefix: drupal_if_field
+  description: Render a block only if the field has output.
+  body: |
+    {% if ${1:content.field_name}|render|trim is not empty %}
+      $0
+    {% endif %}
+
+- name: Format date
+  prefix: drupal_format_date
+  description: Format a timestamp with a date format.
+  body: |
+    {{ ${1:node.created.value}|format_date('${2|medium,short,long,html_date|}') }}
+
+- name: Clean class
+  prefix: drupal_clean_class
+  description: Make a string safe to use as a CSS class.
+  body: |
+    {{ ${1:value}|clean_class }}
+
+- name: Include template
+  prefix: drupal_include
+  description: Include another template with isolated variables.
+  body: |
+    {% include '@${1:mytheme}/${2:partials/example}.html.twig' with {${3:title: label}} only %}
+
+- name: Include component
+  prefix: drupal_component_include
+  description: Render a Single Directory Component with props.
+  body: |
+    {{ include('${1:mytheme}:${2:card}', {${3:title: label}}, with_context = false) }}
+
+- name: Embed component
+  prefix: drupal_component_embed
+  description: Embed a Single Directory Component filling a slot.
+  body: |
+    {% embed '${1:mytheme}:${2:card}' with {${3:title: label}} only %}
+      {% block ${4:content} %}
+        $0
+      {% endblock %}
+    {% endembed %}
+
+- name: Theme asset path
+  prefix: drupal_theme_asset
+  description: Path to an asset inside the active theme.
+  body: |
+    {{ base_path ~ directory }}/${1:images/logo.svg}
+
+- name: Dump
+  prefix: drupal_dump
+  description: Dump available variable names (needs Twig debug).
+  body: |
+    {{ dump(${1:_context|keys}) }}
